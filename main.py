@@ -1,23 +1,27 @@
 import json
 from datetime import datetime
 
+
 def load_data():
   try:
     with open('data.json', 'r') as file:
       return json.load(file)
   except FileNotFoundError:
     return {'expenses': [], 'budgets': {}}
-  
+
+
 def save_data(data):
   with open('data.json', 'w') as file:
     json.dump(data, file, indent=4)
+
 
 def validate_input(prompt):
   while True:
     try:
       return float(input(prompt))
     except ValueError:
-      print('Inva;id input, Please enter a valid number.')
+      print('Invalid input, Please enter a valid number.')
+
 
 def add_expense(data, amount, category, date=None, description=None):
   if not date:
@@ -32,20 +36,23 @@ def add_expense(data, amount, category, date=None, description=None):
     'date': date,
     'description': description
   }
-  
+
   data['expenses'].append(expense)
   save_data(data)
-  print(f"Expense of {amount} added in category '{category}'.")
+  print(f"Expense of {amount} added in category '{category}'.\n")
+
 
 def view_expenses(data):
   if not data['expenses']:
-    print('No expenses recorded yet.')
+    print('No expenses recorded yet.\n')
     return
   
   print('\nExpenses:')
   for exp in data['expenses']:
     description = exp['description'] if exp['description'] is not None else 'N/A'
     print(f"Date: {exp['date']} | Amount: {exp['amount']} | Category: {exp['category']} | Description: {description}")
+  print('\n')
+
 
 def view_budget(data):
   print('\nCurrent Budgets:')
@@ -53,11 +60,14 @@ def view_budget(data):
     category_expenses = sum(exp['amount'] for exp in data['expenses'] if exp['category'] == category)
     remaining_budget = budget - category_expenses
     print(f'{category.capitalize()}: Budgeted: {budget}, Spent: {category_expenses}, Remaining: {remaining_budget}')
+  print('\n')
+
 
 def update_budget(data, category, new_budget):
   data['budgets'][category] = new_budget
   save_data(data)
-  print(f'Budget for {category} updated to {new_budget}.')
+  print(f'Budget for {category} updated to {new_budget}.\n')
+
 
 def delete_expense(data):
   if not data['expenses']:
@@ -72,20 +82,31 @@ def delete_expense(data):
   if 0 <= index < len(data['expenses']):
     deleted = data['expenses'].pop(index)
     save_data(data)
-    print(f'Deleted expense: {deleted}')
+    print(f'Deleted expense: {deleted}\n')
   else:
     print('Invalid index.')
+
 
 def generate_monthly_report(data):
   current_month = datetime.now().strftime('%Y-%m')
   monthly_expenses = [exp for exp in data['expenses'] if exp['date'].startswith(current_month)]
 
+  total_spent = sum(exp['amount'] for exp in monthly_expenses)
+  total_budget = sum(data['budgets'].values())
+  total_remaining = total_budget - total_spent
+
   print('\nMonthly report:')
-  print(f"Total expenses: {sum(exp['amount'] for exp in monthly_expenses)}")
+  print(f'Total expenses: {total_spent}')
   print('Category-wise spending:')
-  for category, budget in data['budgets'].item():
+
+  for category, budget in data['budgets'].items():
     spent = sum(exp['amount'] for exp in monthly_expenses if exp['category'] == category)
-    print(f'  {category.capitalize()}: Spent {spent}, Budget {budget}, Remaining {budget - spent}')
+    remaining = budget - spent
+    print(f'  {category.capitalize():<15}: Spent {spent:<6}, Budget {budget:<6}, Remaining {remaining:<6}')
+
+  print('-' * 50)
+  print(f"  {'Total':<15}: Spent {total_spent:<6}, Budget {total_budget:<6}, Remaining {total_remaining:<6}")
+  print('\n')
 
 def main():
   data = load_data()
