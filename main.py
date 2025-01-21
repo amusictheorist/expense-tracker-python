@@ -32,3 +32,10 @@ def view_expenses(data):
   for exp in data['expenses']:
     print(f"Date: {exp['date']} | Amount: {exp['amount']} | Category: {exp['category']} | Description: {exp['description']}")
 
+def view_budget(data):
+  print('\nCurrent Budgets:')
+  for category, budget in data['budgets'].items():
+    category_expenses = sum(exp['amount'] for exp in data['expenses'] if exp['category'] == category)
+    remaining_budget = budget - category_expenses
+    print(f'{category.capitalize()}: Budgeted: {budget}, Spent: {category_expenses}, Remaining: {remaining_budget}')
+
