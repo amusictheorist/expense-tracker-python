@@ -68,6 +68,17 @@ def delete_expense(data):
   else:
     print('Invalid index.')
 
+  def generate_monthly_report(data):
+    current_month = datetime.now().strftime('%Y-%m')
+    monthly_expenses = [exp for exp in data['expenses'] if exp['date'].startswith(current_month)]
+
+    print('\nMonthly report:')
+    print(f"Total expenses: {sum(exp['amount'] for exp in monthly_expenses)}")
+    print('Category-wise spending:')
+    for category, budget in data['budgets'].item():
+      spent = sum(exp['amount'] for exp in monthly_expensesif exp['category'] == category)
+      print(f'  {category.capitalize()}: Spent {spent}, Budget {budget}, Remaining {budget - spent}')
+
 def main():
   data = load_data()
 
