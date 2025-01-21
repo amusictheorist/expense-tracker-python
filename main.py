@@ -51,6 +51,23 @@ def update_budget(data, category, new_budget):
   save_data(data)
   print(f'Budget for {category} updated to {new_budget}.')
 
+def delete_expense(data):
+  if not data['expenses']:
+    print('No expenses to delete.')
+    return
+  
+  print('\nExpenses:')
+  for idx, exp in enumerate(data['expenses']):
+    print(f"{idx}: {exp['date']} | {exp['category']} | {exp['amount']} {exp['description']}")
+
+  index = int(input('\nEnter the index of the expense to delete: '))
+  if 0 <= index < len(data['expenses']):
+    deleted = data['expenses'].pop(index)
+    save_data(data)
+    print(f'Deleted expense: {deleted}')
+  else:
+    print('Invalid index.')
+
 def main():
   data = load_data()
 
