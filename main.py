@@ -20,6 +20,9 @@ def validate_input(prompt):
       print('Inva;id input, Please enter a valid number.')
 
 def add_expense(data, amount, category, date=None, description=''):
+  if not description:
+    description = 'N/A'
+    
   if not date:
     date = datetime.now().strftime('%Y-%m-%d')
   expense = {
