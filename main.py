@@ -12,3 +12,16 @@ def save_data(data):
   with open('data.json', 'w') as file:
     json.dump(data, file, indent=4)
 
+def add_expense(data, amount, category, date=None, description=''):
+  if not date:
+    date = datetime.now().strftime('%Y-%m-%d')
+  expense = {
+    'amount': amount,
+    'category': category,
+    'date': date,
+    'decription': description
+  }
+  data['expenses'].append(expense)
+  save_data(data)
+  print(f"Expense of {amount} added in category '{category}'.")
+
