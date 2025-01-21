@@ -19,18 +19,20 @@ def validate_input(prompt):
     except ValueError:
       print('Inva;id input, Please enter a valid number.')
 
-def add_expense(data, amount, category, date=None, description=''):
-  if not description:
-    description = 'N/A'
-    
+def add_expense(data, amount, category, date=None, description=None):
   if not date:
     date = datetime.now().strftime('%Y-%m-%d')
+
+  if description == '':
+    description = None
+
   expense = {
     'amount': amount,
     'category': category,
     'date': date,
-    'decription': description
+    'description': description
   }
+  
   data['expenses'].append(expense)
   save_data(data)
   print(f"Expense of {amount} added in category '{category}'.")
@@ -39,8 +41,11 @@ def view_expenses(data):
   if not data['expenses']:
     print('No expenses recorded yet.')
     return
+  
+  print('\nExpenses:')
   for exp in data['expenses']:
-    print(f"Date: {exp['date']} | Amount: {exp['amount']} | Category: {exp['category']} | Description: {exp['description']}")
+    description = exp['description'] if exp['description'] is not None else 'N/A'
+    print(f"Date: {exp['date']} | Amount: {exp['amount']} | Category: {exp['category']} | Description: {description}")
 
 def view_budget(data):
   print('\nCurrent Budgets:')
