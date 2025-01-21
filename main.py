@@ -12,6 +12,13 @@ def save_data(data):
   with open('data.json', 'w') as file:
     json.dump(data, file, indent=4)
 
+def validate_input(prompt):
+  while True:
+    try:
+      return float(input(prompt))
+    except ValueError:
+      print('Inva;id input, Please enter a valid number.')
+
 def add_expense(data, amount, category, date=None, description=''):
   if not date:
     date = datetime.now().strftime('%Y-%m-%d')
