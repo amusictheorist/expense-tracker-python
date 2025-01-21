@@ -25,3 +25,10 @@ def add_expense(data, amount, category, date=None, description=''):
   save_data(data)
   print(f"Expense of {amount} added in category '{category}'.")
 
+def view_expenses(data):
+  if not data['expenses']:
+    print('No expenses recorded yet.')
+    return
+  for exp in data['expenses']:
+    print(f"Date: {exp['date']} | Amount: {exp['amount']} | Category: {exp['category']} | Description: {exp['description']}")
+
