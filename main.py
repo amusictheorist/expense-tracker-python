@@ -68,16 +68,16 @@ def delete_expense(data):
   else:
     print('Invalid index.')
 
-  def generate_monthly_report(data):
-    current_month = datetime.now().strftime('%Y-%m')
-    monthly_expenses = [exp for exp in data['expenses'] if exp['date'].startswith(current_month)]
+def generate_monthly_report(data):
+  current_month = datetime.now().strftime('%Y-%m')
+  monthly_expenses = [exp for exp in data['expenses'] if exp['date'].startswith(current_month)]
 
-    print('\nMonthly report:')
-    print(f"Total expenses: {sum(exp['amount'] for exp in monthly_expenses)}")
-    print('Category-wise spending:')
-    for category, budget in data['budgets'].item():
-      spent = sum(exp['amount'] for exp in monthly_expensesif exp['category'] == category)
-      print(f'  {category.capitalize()}: Spent {spent}, Budget {budget}, Remaining {budget - spent}')
+  print('\nMonthly report:')
+  print(f"Total expenses: {sum(exp['amount'] for exp in monthly_expenses)}")
+  print('Category-wise spending:')
+  for category, budget in data['budgets'].item():
+    spent = sum(exp['amount'] for exp in monthly_expenses if exp['category'] == category)
+    print(f'  {category.capitalize()}: Spent {spent}, Budget {budget}, Remaining {budget - spent}')
 
 def main():
   data = load_data()
@@ -88,7 +88,9 @@ def main():
     print('2. View expenses')
     print('3. View budget')
     print('4. Update budget')
-    print('5. Exit')
+    print('5. Delete expense')
+    print('6. Monthly report')
+    print('7. Exit')
     choice = input('Select an option: ')
 
     if choice == '1':
@@ -109,6 +111,12 @@ def main():
       update_budget(data, category, new_budget)
 
     elif choice == '5':
+      delete_expense(data)
+
+    elif choice == '6':
+      generate_monthly_report(data)
+
+    elif choice == '7':
       print('Exiting the application...')
       break
 
