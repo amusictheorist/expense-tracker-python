@@ -39,3 +39,8 @@ def view_budget(data):
     remaining_budget = budget - category_expenses
     print(f'{category.capitalize()}: Budgeted: {budget}, Spent: {category_expenses}, Remaining: {remaining_budget}')
 
+def update_budget(data, category, new_budget):
+  data['budgets'][category] = new_budget
+  save_data(data)
+  print(f'Budget for {category} updated to {new_budget}.')
+
